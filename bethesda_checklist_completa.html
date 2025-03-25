@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checklist Completa - Bethesda Tiroide</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f9f9f9; padding: 20px; }
+    h1 { color: #333; text-align: center; }
+    .section { background: #fff; padding: 15px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 0 5px #ccc; }
+    .section h2 { color: #444; }
+    button { padding: 10px 20px; background-color: #1976d2; color: #fff; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background-color: #1565c0; }
+    #result { margin-top: 20px; background: #e8f5e9; padding: 15px; border-radius: 8px; }
+  </style>
+</head>
+<body>
+
+<h1>Checklist Completa - Bethesda Tiroide</h1>
+
+<form id="bethesdaForm">
+
+  <div class="section">
+    <h2>Valutazione della Colloide</h2>
+    <label><input type="checkbox" name="colloide" value="assente"> Assente</label><br>
+    <label><input type="checkbox" name="colloide" value="scarsa"> Scarsa</label><br>
+    <label><input type="checkbox" name="colloide" value="moderata"> Moderata</label><br>
+    <label><input type="checkbox" name="colloide" value="abbondante"> Abbondante</label><br>
+    <label><input type="checkbox" name="colloide" value="densa"> Densa con rottura</label>
+  </div>
+
+  <div class="section">
+    <h2>Valutazione dei Tireociti</h2>
+    <label><input type="checkbox" name="tireociti" value="artefatti"> Non valutabili per artefatti</label><br>
+    <label><input type="checkbox" name="tireociti" value="meno6"> Meno di 6 cluster con ≥10 cellule</label><br>
+    <label><input type="checkbox" name="tireociti" value="adeguato"> ≥6 cluster con ≥10 cellule (Adeguato)</label><br>
+    <label><input type="checkbox" name="tireociti" value="piccoli"> Piccole dimensioni, nuclei regolari e scuri</label><br>
+    <label><input type="checkbox" name="tireociti" value="nucleoli"> Nucleoli evidenti</label><br>
+    <label><input type="checkbox" name="tireociti" value="chiarificati"> Nuclei chiarificati</label><br>
+    <label><input type="checkbox" name="tireociti" value="grooves"> Nuclei con grooves</label><br>
+    <label><input type="checkbox" name="tireociti" value="pseudoinclusi"> Nuclei con pseudoinclusi</label><br>
+  </div>
+
+  <div class="section">
+    <h2>Architettura</h2>
+    <label><input type="checkbox" name="architettura" value="macro"> Prevalentemente macrofollicolare</label><br>
+    <label><input type="checkbox" name="architettura" value="micro"> Prevalentemente microfollicolare</label><br>
+    <label><input type="checkbox" name="architettura" value="papille"> Presenza di papille</label><br>
+    <label><input type="checkbox" name="architettura" value="scoese"> Cellule scoese / disordinate</label>
+  </div>
+
+  <div class="section">
+    <h2>Atipia</h2>
+    <label><input type="checkbox" name="atipia" value="nucleare"> Atipia nucleare (chiarificazione, nucleoli, grooves, pseudoinclusi)</label><br>
+    <label><input type="checkbox" name="atipia" value="architetturale"> Atipia architetturale (microfollicoli, solidi)</label>
+  </div>
+
+  <div class="section">
+    <h2>Sospetto Midollare - LP4</h2>
+    <label><input type="checkbox" name="midollare_lp" value="ipercellulato"> Campione ipercellulato</label><br>
+    <label><input type="checkbox" name="midollare_lp" value="scoese"> Cellule scoese</label><br>
+    <label><input type="checkbox" name="midollare_lp" value="monotonia"> Monotonia cellulare</label><br>
+    <label><input type="checkbox" name="midollare_lp" value="colloide_assente"> Totale assenza di colloide</label>
+  </div>
+
+  <div class="section">
+    <h2>Sospetto Midollare - HP4</h2>
+    <label><input type="checkbox" name="midollare_hp" value="plasmocitoidi"> Plasmocitoidi</label><br>
+    <label><input type="checkbox" name="midollare_hp" value="code"> Code citoplasmatiche</label><br>
+    <label><input type="checkbox" name="midollare_hp" value="salepepe"> Cromatina sale e pepe</label><br>
+    <label><input type="checkbox" name="midollare_hp" value="binucleazione"> Binucleazione</label>
+  </div>
+
+  <div class="section">
+    <h2>Sospetto Anaplastico / Linfoma</h2>
+    <label><input type="checkbox" name="anaplastico" value="pleomorfismo"> Pleomorfismo marcato</label><br>
+    <label><input type="checkbox" name="anaplastico" value="necrosi"> Necrosi</label><br>
+    <label><input type="checkbox" name="anaplastico" value="linfoma"> Popolazione linfocitaria monotona</label>
+  </div>
+
+  <button type="button" onclick="calcolaBethesda()">Calcola Categoria Bethesda</button>
+</form>
+
+<div id="result"></div>
+
+<script>
+function calcolaBethesda() {
+  const form = document.getElementById('bethesdaForm');
+  const anaplastico = [...form.querySelectorAll('input[name="anaplastico"]:checked')].map(el => el.value);
+  const midollare_lp = [...form.querySelectorAll('input[name="midollare_lp"]:checked')];
+  const midollare_hp = [...form.querySelectorAll('input[name="midollare_hp"]:checked')];
+  const architettura = [...form.querySelectorAll('input[name="architettura"]:checked')].map(el => el.value);
+  const tireociti = [...form.querySelectorAll('input[name="tireociti"]:checked')].map(el => el.value);
+  const atipia = [...form.querySelectorAll('input[name="atipia"]:checked')];
+  const colloide = [...form.querySelectorAll('input[name="colloide"]:checked')].map(el => el.value);
+
+  let categoria = 'Categoria III - Atipia di Significato Indeterminato (default)';
+
+  if (anaplastico.includes('pleomorfismo') || anaplastico.includes('necrosi')) categoria = 'Categoria VI - Maligno (Sospetto Anaplastico)';
+  else if (anaplastico.includes('linfoma')) categoria = 'Categoria VI - Maligno (Sospetto Linfoma)';
+  else if (midollare_lp.length || midollare_hp.length) categoria = 'Categoria VI - Maligno (Sospetto Midollare)';
+  else if (tireociti.includes('pseudoinclusi')) categoria = 'Categoria VI - Maligno (Papillare certo)';
+  else if (tireociti.includes('grooves') && tireociti.includes('chiarificati')) categoria = 'Categoria V - Sospetto Papillare';
+  else if (architettura.includes('papille')) categoria = 'Categoria V - Sospetto Papillare';
+  else if (architettura.includes('micro')) categoria = 'Categoria IV - Neoplasia Follicolare / Sospetto FN';
+  else if (colloide.includes('abbondante') && !atipia.length) categoria = 'Categoria II - Benigno';
+
+  document.getElementById('result').innerHTML = '<strong>Categoria Bethesda suggerita:</strong><br>' + categoria;
+}
+</script>
+
+</body>
+</html>
